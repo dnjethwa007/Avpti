@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "Sub":"Mathematics",
+        "code":4300001
+    },
+    {
+        "id":2,
+        "Sub":"Communication Skills in English",
+        "code":4300002
+    },
+    {
+        "id":3,
+        "Sub":" Physics",
+        "code":4300005
+    },
+    {
+        "id":4,
+        "Sub":" Engineering Drawing and Computer Aided Design",
+        "code":4300012
+    },
+    {
+        "id":5,
+        "Sub":"Fundamentals of Instrumentation and Control Engineering",
+        "code":4311701
+    },
+    {
+        "id":6,
+        "Sub":"Instrumentation Workshop",
+        "code":4311702
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "id":1,
+        "Sub":"Computer Maintenance & Troubleshooting",
+        "code":4360701
+    },
+    {
+        "id":2,
+        "Sub":"Basics of Information Security",
+        "code":4360702
+    },
+    {
+        "id":3,
+        "Sub":"Fundamentals of IoT",
+        "code":4360703
+    },
+    {
+        "id":4,
+        "Sub":"Introduction to NO SQL",
+        "code":4360704
+    },
+    {
+        "id":5,
+        "Sub":"Cloud Computing ",
+        "code":4360709
+    }
+]

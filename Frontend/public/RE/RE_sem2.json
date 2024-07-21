@@ -1,0 +1,37 @@
+[
+    {
+        "id":1,
+        "Sub":"Fundamentals of Electrical and Electronics Engineering",
+        "code":1326401
+    },
+    {
+        "id":2,
+        "Sub":"Environment and Sustainability",
+        "code":4300003
+    },
+    {
+        "id":3,
+        "Sub":"Indian Constitution",
+        "code":4300016
+    },
+    {
+        "id":4,
+        "Sub":"Basics of Mechanical Engineering",
+        "code":4300017
+    },
+    {
+        "id":5,
+        "Sub":"Computer Applications and Graphics",
+        "code":4300019
+    },
+    {
+        "id":6,
+        "Sub":"Basics of Civil Engineering",
+        "code":4310001
+    },
+    {
+        "id":7,
+        "Sub":"Applied Mathematics",
+        "code":4320001
+    }
+]

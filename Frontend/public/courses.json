@@ -1,0 +1,51 @@
+[
+    {
+        "id":1,
+        "name":"Diploma in Computer Engineering",
+        "image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fblog.pitsco.com%2Fhs-fs%2Fhubfs%2FBlog%2520Images%2FCoding-computer-girl-1366-1118.png%3Fwidth%3D1366%26name%3DCoding-computer-girl-1366-1118.png&f=1&nofb=1&ipt=8785936e6c01941befe8e9c065a79bd3caf9f92ad948d559b998200b1e452f28&ipo=images",
+        "title":"CE"
+    },
+    
+    {
+        "id":2,
+        "name":"Diploma in Renewable Energy",
+        "image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.eit.edu.au%2Fwp-content%2Fuploads%2F2020%2F08%2FEngineer-at-wind-farm-scaled.jpeg&f=1&nofb=1&ipt=ec2cd208cc833aaf893d9a4680c23f773f6ab41dfd5d7b73ab4908719dbce968&ipo=images",
+        "title":"RE"
+    },
+    
+    {
+        "id":3,
+        "name":"Diploma in Electrical Engineering",
+        "image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fafter10thwhat.com%2Fwp-content%2Fuploads%2F2016%2F01%2FDiploma-in-Electrical-Engineering.jpg&f=1&nofb=1&ipt=f347df87e038bb3abfb444a3ad4df96be56373b94773fdf5106d2ace1e725f8f&ipo=images",
+        "title":"EE"
+
+    },
+    
+    {
+        "id":4,
+        "name":"Diploma in Biomedical Engineering",
+        "image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.wichita.edu%2Fabout%2Fwsunews%2Fnews%2F2019%2F12-dec%2F_images%2Fbiomed_1400.jpg&f=1&nofb=1&ipt=37cf0acdf96605cabcf7daa1741f739e4981bb44cdad5d920d648fd6194cdcac&ipo=images",
+        "title":"BE"
+    },
+    
+    {
+        "id":5,
+        "name":"Diploma in Electronics and Communication Engineering",
+        "image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Felumalaipolytechnic.com%2Fdept-images%2Fece%2Flab%2Fdiploma-in-electronics-and-communication-engineering-3.JPG&f=1&nofb=1&ipt=6f5aa56e10cb3ff7a480b0815e9f95b3715c6dcae56fcfda966e3bffa38d3405&ipo=images",
+        "title":"EC"
+    },
+    
+    {
+        "id":6,
+        "name":"Diploma in Information and Communication Technology",
+        "image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpioneer4ss.com%2Fwp-content%2Fuploads%2F2021%2F11%2FDIPLOMA-IN-INFORMATION-COMMUNICATION-TECHNOLOGY.jpg&f=1&nofb=1&ipt=b0ce7bb91f88c2b20c096de3ef6ee6aedd6b100dd5f95eaa4f8cbfd29ebd1069&ipo=images",
+        "title":"ICT"
+    },
+    
+    {
+        "id":7,
+        "name":"Diploma in Instrumentation and Control Engineering",
+        "image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.eim.edu.au%2Fwp-content%2Fuploads%2F2022%2F07%2Felectrotech-3.jpg&f=1&nofb=1&ipt=b341a9c9370daffba850beeac897821312200c919b8e455d837ff72152d2e212&ipo=images",
+        "title":"IC"
+    }
+]

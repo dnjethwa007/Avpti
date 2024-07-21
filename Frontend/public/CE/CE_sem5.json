@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "Sub":"Internship Project",
+        "code":4350704
+    },
+    {
+        "id":2,
+        "Sub":"Entrepreneurship & Start-ups ",
+        "code":4300021
+    },
+    {
+        "id":3,
+        "Sub":"Computer Organization & Architecture",
+        "code":4350701
+    },
+    {
+        "id":4,
+        "Sub":"Introduction to Machine Learning",
+        "code":4350702
+    },
+    {
+        "id":5,
+        "Sub":"Mobile Application Development using Android",
+        "code":4350703
+    },
+    {
+        "id":6,
+        "Sub":"Advanced Computer Network ",
+        "code":4350706
+    }
+]

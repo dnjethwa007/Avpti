@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "Sub":"Mathematics",
+        "code":4300001
+    },
+    {
+        "id":2,
+        "Sub":"Communication Skills in English",
+        "code":4300002
+    },
+    {
+        "id":3,
+        "Sub":"Fundamentals of Electrical and Electronics",
+        "code":4300018
+    },
+    {
+        "id":4,
+        "Sub":"Environment and Sustainability",
+        "code":4300003
+    },
+    {
+        "id":5,
+        "Sub":"Fundamentals of Computer",
+        "code":4310701
+    },
+    {
+        "id":6,
+        "Sub":"Basic Computer Programming ",
+        "code":4310702
+    }
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "Sub":" Electrical and Mechanical Workshop Practice",
+        "code":1316401
+    },
+    {
+        "id":2,
+        "Sub":"Basics of Renewable Energy",
+        "code":1316402
+    },
+    {
+        "id":3,
+        "Sub":"Mathematics",
+        "code":4300001
+    },
+    {
+        "id":4,
+        "Sub":"Communication Skills in English",
+        "code":4300002
+    },
+    {
+        "id":5,
+        "Sub":"Applied Physics",
+        "code":4300004
+    },
+    {
+        "id":6,
+        "Sub":"Engineering Drawing",
+        "code":4300007
+    }
+]

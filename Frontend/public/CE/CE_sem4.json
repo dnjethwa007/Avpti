@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "Sub":"Integrated Personality Development Course",
+        "code":4340003
+    },
+    {
+        "id":2,
+        "Sub":"Advanced Object Oriented Programming",
+        "code":4340701
+    },
+    {
+        "id":3,
+        "Sub":"Introduction to Software Engineering",
+        "code":4340702
+    },
+    {
+        "id":4,
+        "Sub":"Computer Networking",
+        "code":4340703
+    },
+    {
+        "id":5,
+        "Sub":"Introduction to Web Development",
+        "code":4340704
+    },
+    {
+        "id":6,
+        "Sub":"Modern Practical Tools",
+        "code":4340705
+    }
+]

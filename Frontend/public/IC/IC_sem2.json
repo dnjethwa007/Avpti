@@ -1,0 +1,37 @@
+[
+    {
+        "id":1,
+        "Sub":"Environment and Sustainability",
+        "code":4300003
+    },
+    {
+        "id":2,
+        "Sub":"Indian Constitution",
+        "code":4320016
+    },
+    {
+        "id":3,
+        "Sub":"Engineering Mathematics",
+        "code":4320002
+    },
+    {
+        "id":4,
+        "Sub":" Industrial Transducers",
+        "code":4321701
+    },
+    {
+        "id":5,
+        "Sub":"Fundamentals of Information Technology Systems",
+        "code":4321702
+    },
+    {
+        "id":6,
+        "Sub":"Programming Methodology",
+        "code":4321703
+    },
+    {
+        "id":7,
+        "Sub":"Fundamentals of Electrical and Electronic Instrumentation",
+        "code":4321704
+    }
+]

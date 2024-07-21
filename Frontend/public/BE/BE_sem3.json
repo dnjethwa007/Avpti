@@ -1,0 +1,27 @@
+[
+    {
+        "id":1,
+        "Sub":"Medical Electronics",
+        "code":4330301
+    },
+    {
+        "id":2,
+        "Sub":"Medical Sensors & Measurement Technique",
+        "code":4330302
+    },
+    {
+        "id":3,
+        "Sub":"Fundamental of Digital Electronics",
+        "code":4330303
+    },
+    {
+        "id":4,
+        "Sub":" Principle of Telemedical Communication",
+        "code":4330304
+    },
+    {
+        "id":5,
+        "Sub":"Hospital Management & Information System",
+        "code":4330305
+    }
+]

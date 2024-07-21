@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "Sub":"Summer Internship-I",
+        "code":4330001
+    },
+    {
+        "id":2,
+        "Sub":"Scripting Language -Python",
+        "code":4330701
+    },
+    {
+        "id":3,
+        "Sub":"RDBMS",
+        "code":4330702
+    },
+    {
+        "id":4,
+        "Sub":"Basics of Operating System",
+        "code":4330703
+    },
+    {
+        "id":5,
+        "Sub":"Data Structure and Algorithm",
+        "code":4330704
+    },
+    {
+        "id":6,
+        "Sub":"Responsive Web Page Design",
+        "code":4330705
+    }
+]

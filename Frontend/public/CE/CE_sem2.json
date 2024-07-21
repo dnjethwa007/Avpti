@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "Sub":"Physics",
+        "code":4300005
+    },
+    {
+        "id":2,
+        "Sub":"Engineering Mathematics",
+        "code":4320002
+    },
+    {
+        "id":3,
+        "Sub":"Electronics and Computer workshop",
+        "code":4320701
+    },
+    {
+        "id":4,
+        "Sub":"Basic Object Oriented Programming",
+        "code":4320702
+    },
+    {
+        "id":5,
+        "Sub":"Basics of Digital Electronics",
+        "code":4320703
+    },
+    {
+        "id":6,
+        "Sub":"Static Webpage Design",
+        "code":4311603
+    }
+]

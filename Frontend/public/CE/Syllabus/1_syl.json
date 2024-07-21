@@ -1,0 +1,93 @@
+[
+  {
+    "code": 4300001,
+    "Sub": "Mathematics",
+    "Syllabus": "/CE/Syllabus/Maths/4300001.pdf",
+    "StudentMaterial": [
+      {
+        "link": "unit-1.pdf",
+        "title": "Determinant and Function"
+      },
+      {
+        "link": "unit-2.pdf",
+        "title": "Trigonometry"
+      }
+    ],
+    "Assignment": [
+      {
+        "link": "assignment-1.pdf",
+        "title": "Assignment-1"
+      }
+    ],
+    "ImportantQuestions": "link_to_questions.pdf",
+    "ModelQuestionPaper": "link_to_model_question_paper.pdf",
+    "GTUExamPaper": "link_to_gtu_exam_paper.pdf"
+  },
+  {
+    "code": 4300002,
+    "Sub": "Communication Skills in English",
+    "Syllabus": "/CE/Syllabus/English/4300002.pdf",
+    "StudentMaterial": [
+      {
+        "link": "unit-1.pdf",
+        "title": "Theory of Communication"
+      },
+      {
+        "link": "unit-2.pdf",
+        "title": "Grammar"
+      },
+      {
+        "link": "unit-3.pdf",
+        "title": " Prose and Poetry"
+      },
+      {
+        "link": "unit-4.pdf",
+        "title": "Techniques of Writing"
+      },
+    ],
+    "Assignment": "link_to_assignment.pdf",
+    "ImportantQuestions": "link_to_questions.pdf",
+    "ModelQuestionPaper": "link_to_model_question_paper.pdf",
+    "GTUExamPaper": "link_to_gtu_exam_paper.pdf"
+  },
+  {
+    "code": 4300018,
+    "Sub": "Fundamentals of Electrical and Electronics",
+    "Syllabus": "/CE/Syllabus/4300018.pdf",
+    "StudentMaterial": "link_to_material.pdf",
+    "Assignment": "link_to_assignment.pdf",
+    "ImportantQuestions": "link_to_questions.pdf",
+    "ModelQuestionPaper": "link_to_model_question_paper.pdf",
+    "GTUExamPaper": "link_to_gtu_exam_paper.pdf"
+  },
+  {
+    "code": 4300003,
+    "Sub": "Environment and Sustainability",
+    "Syllabus": "/CE/Syllabus/4300003.pdf",
+    "StudentMaterial": "link_to_material.pdf",
+    "Assignment": "link_to_assignment.pdf",
+    "ImportantQuestions": "link_to_questions.pdf",
+    "ModelQuestionPaper": "link_to_model_question_paper.pdf",
+    "GTUExamPaper": "link_to_gtu_exam_paper.pdf"
+  },
+  {
+    "code": 4310701,
+    "Sub": "Fundamentals of Computer",
+    "Syllabus": "/CE/Syllabus/4310701.pdf",
+    "StudentMaterial": "link_to_material.pdf",
+    "Assignment": "link_to_assignment.pdf",
+    "ImportantQuestions": "link_to_questions.pdf",
+    "ModelQuestionPaper": "link_to_model_question_paper.pdf",
+    "GTUExamPaper": "link_to_gtu_exam_paper.pdf"
+  },
+  {
+    "code": 4310702,
+    "Sub": "Basic Computer Programming",
+    "Syllabus": "/CE/Syllabus/4310702.pdf",
+    "StudentMaterial": "link_to_material.pdf",
+    "Assignment": "link_to_assignment.pdf",
+    "ImportantQuestions": "link_to_questions.pdf",
+    "ModelQuestionPaper": "link_to_model_question_paper.pdf",
+    "GTUExamPaper": "link_to_gtu_exam_paper.pdf"
+  }
+]

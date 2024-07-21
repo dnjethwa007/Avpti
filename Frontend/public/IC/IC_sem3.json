@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "Sub":" Summer Internship-I",
+        "code":4330001
+    },
+    {
+        "id":2,
+        "Sub":"Digital Techniques",
+        "code":4331701
+    },
+    {
+        "id":3,
+        "Sub":"Control Components",
+        "code":4331702
+    },
+    {
+        "id":4,
+        "Sub":"Process Instrumentation - I",
+        "code":4331703
+    },
+    {
+        "id":5,
+        "Sub":"Electronics And Pneumatic Instrumentation",
+        "code":4331704
+    },
+    {
+        "id":6,
+        "Sub":"Seminar",
+        "code":4331705
+    }
+]
