@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 function Sem() {
@@ -19,28 +19,22 @@ function Sem() {
   };
 
   return (
-    <div className='max-w-screen-2xl container mx-auto md:px-20 px-4'>
+    <div className="max-w-screen-2xl container mx-auto md:px-20 px-4 dark:bg-slate-900 dark:text-white">
       <Navbar />
-      <div className='mt-28 items-center justify-center text-center'>
-        <h1 className='text-2xl md:text-4xl mt-20'>
-          Semesters for <span className='text-pink-500'>Selected Course</span>
+      <div className="mt-28 text-center">
+        <h1 className="text-3xl md:text-5xl mt-20 font-bold">
+          Semesters for <span className="text-pink-500">{courseTitle}</span>
         </h1>
-        <Link to="/course">
-          <button className='mt-6 bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-700 duration-300'>Back</button>
-        </Link>
       </div>
-
-      <div className='mt-12 grid grid-cols-1 md:grid-cols-3 gap-8'>
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         {semesters.map((sem) => (
           <div
             key={sem.id}
-            className='relative group cursor-pointer'
+            className="relative group cursor-pointer bg-pink-100 dark:bg-gray-700 rounded-lg shadow-md p-6 transform transition-transform duration-300 hover:scale-105"
             onClick={() => handleCardClick(sem.id)}
           >
-            <div className="bg-base-100 w-70 shadow-xl overflow-hidden rounded-xl p-4">
-              <div className="text-center p-4">
-                <h2 className="text-xl font-bold">{sem.name}</h2>
-              </div>
+            <div className="text-center">
+              <h2 className="text-2xl font-bold">{sem.name}</h2>
             </div>
           </div>
         ))}

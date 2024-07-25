@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FaDownload } from 'react-icons/fa';
+import Footer from './Footer';
 
 function StudentMaterials() {
   const { courseTitle, semId, subjectCode } = useParams();
@@ -23,37 +24,31 @@ function StudentMaterials() {
   }, [courseTitle, semId, subjectCode]);
 
   if (!subject) {
-    return <div>Loading...</div>;
+    return <div className="text-center mt-28">Loading...</div>;
   }
 
-  // Check if StudentMaterial is an array or a single link
   const isArray = Array.isArray(subject.StudentMaterial);
 
   return (
     <>
-      <div className='max-w-screen-2xl container mx-auto px-4 md:px-20'>
+      <div className='max-w-screen-2xl container mx-auto px-4 md:px-20 dark:bg-slate-900 dark:text-white'>
         <div className='mt-28 flex flex-col items-center justify-center'>
           <h1 className='text-4xl md:text-5xl font-bold mb-12 text-center'>
             Each Unit of <span className='text-pink-500'>{subject.Sub}</span>
           </h1>
-          <Link to={`/course/${courseTitle}/${semId}/${subjectCode}`}>
-            <button className='m-3 bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-700 duration-300'>Back</button>
-          </Link>
           <div className='w-full bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg p-6 mb-6'>
             {isArray ? (
-              <div>
-                {subject.StudentMaterial.map((unit, index) => (
-                  <div key={index} className='flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-4'>
-                    <span className='text-lg font-semibold'>{index + 1}. {unit.title}</span>
-                    <a href={`/CE/Syllabus/${unit.link}`} download className='text-pink-500 hover:text-pink-700 flex items-center'>
-                      <FaDownload size={24} className='mr-2' />
-                      Download
-                    </a>
-                  </div>
-                ))}
-              </div>
+              subject.StudentMaterial.map((unit, index) => (
+                <div key={index} className='flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-4 transition-transform transform hover:scale-105'>
+                  <span className='text-lg font-semibold'>{index + 1}. {unit.title}</span>
+                  <a href={`/CE/Syllabus/${subject.Sub}/${unit.link}`} download className='text-pink-500 hover:text-pink-700 flex items-center'>
+                    <FaDownload size={24} className='mr-2' />
+                    Download
+                  </a>
+                </div>
+              ))
             ) : (
-              <div className='flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4'>
+              <div className='flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 transition-transform transform hover:scale-105'>
                 <span className='text-lg font-semibold'>Student Material</span>
                 <a href={subject.StudentMaterial} download className='text-pink-500 hover:text-pink-700 flex items-center'>
                   <FaDownload size={24} className='mr-2' />
@@ -64,6 +59,7 @@ function StudentMaterials() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

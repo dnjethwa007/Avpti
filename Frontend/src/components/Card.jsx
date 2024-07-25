@@ -1,4 +1,3 @@
-// Card.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,9 +9,9 @@ function Card({ item }) {
   };
 
   return (
-    <div className="relative group">
-      <div className="bg-base-100 w-70 shadow-xl overflow-hidden rounded-xl">
-        <figure className="relative">
+    <div className="relative group h-64 w-75 dark:bg-slate-900 dark:text-white"> {/* Decreased height to h-64 and added fixed width */}
+      <div className="bg-base-100 shadow-xl overflow-hidden rounded-xl h-full w-full">
+        <figure className="relative h-full w-full">
           <img
             src={item.image}
             alt={item.name}
