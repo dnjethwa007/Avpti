@@ -53,7 +53,6 @@ app.post("/user/login", async (req, res) => {
             return res.status(400).json({ message: "Incorrect password" });
         }
 
-        // Exclude password from user data
         const { password: userPassword, ...userData } = user.toObject();
         res.status(200).json({ user: userData });
     } catch (error) {
@@ -61,6 +60,7 @@ app.post("/user/login", async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
 
 app.post("/user/send-otp", async (req, res) => {
     const { email } = req.body;
