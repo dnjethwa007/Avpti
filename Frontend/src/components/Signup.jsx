@@ -187,13 +187,28 @@ function Signup() {
                   placeholder="Enter your password"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
                   autoComplete="off"
-                  {...register("password", { required: "This field is required" })}
+                  {...register("password", { 
+                    required: "This field is required",
+                    pattern: {
+                      value: /^[A-Z][a-z0-9]*$/, // First letter uppercase, rest can be lowercase letters or digits
+                      message: "Password must start with an uppercase letter, followed by lowercase letters or digits"
+                    },
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters long"
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: "Password must be no more than 10 characters long"
+                    }
+                  })}
                   onChange={handleInputChange}
                 />
                 {errors.password && (
                   <span className="text-sm text-red-500">{errors.password.message}</span>
                 )}
               </div>
+ 
 
               {/* Confirm Password */}
               <div className="mt-4 space-y-2">
@@ -204,7 +219,9 @@ function Signup() {
                   placeholder="Confirm your password"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
                   autoComplete="off"
-                  {...register("confirmPassword", { required: "This field is required" })}
+                  {...register("confirmPassword", { 
+                    required: "This field is required"
+                  })}
                   onChange={handleInputChange}
                 />
                 {errors.confirmPassword && (

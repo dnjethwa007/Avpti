@@ -5,7 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Signup from "./Signup";
 
-function Login() {
+function Login({ onLoginSuccess }) {
     const {
         register,
         handleSubmit,
@@ -30,12 +30,12 @@ function Login() {
                 toast.success("Logged in Successfully");
                 document.getElementById("my_modal_3").close();
                 localStorage.setItem("Users", JSON.stringify(res.data.user));
+                onLoginSuccess(); // Notify parent component of successful login
                 setTimeout(() => {
                     navigate(currentLocation || "/");
                 }, 1000);
             }
         } catch (err) {
-            // Extract error message from response and set it in state
             const errorMessage = err.response?.data?.message || "Login failed";
             setBackendError(errorMessage); // Update local state with error message
             toast.error(errorMessage); // Show error message in toast
