@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Login from "./Login";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Login from './Login';
 import DropdownMenu from './DropdownMenu';
-import { CgProfile } from "react-icons/cg";
+import ProfileDropdown from './ProfileDropdown';
 
 function Navbar() {
   const [sticky, setSticky] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState('');
 
   const navigate = useNavigate();
 
@@ -16,15 +16,16 @@ function Navbar() {
       setSticky(window.scrollY > 0);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("Users");
+    // Initial load
+    const storedUser = localStorage.getItem('Users');
     if (storedUser) {
       const user = JSON.parse(storedUser);
       setIsLoggedIn(true);
@@ -38,47 +39,50 @@ function Navbar() {
         setUserName(`${detail.user.firstName} ${detail.user.lastName}`);
       } else {
         setIsLoggedIn(false);
-        setUserName("");
+        setUserName('');
       }
     };
 
-    window.addEventListener("authChange", handleAuthChange);
+    const handleProfileUpdate = (event) => {
+      const updatedUser = event.detail;
+      setUserName(`${updatedUser.firstName} ${updatedUser.lastName}`);
+    };
+
+    window.addEventListener('authChange', handleAuthChange);
+    window.addEventListener('profileUpdate', handleProfileUpdate);
 
     return () => {
-      window.removeEventListener("authChange", handleAuthChange);
+      window.removeEventListener('authChange', handleAuthChange);
+      window.removeEventListener('profileUpdate', handleProfileUpdate);
     };
   }, []);
 
   const handleLoginSuccess = () => {
-    const user = JSON.parse(localStorage.getItem("Users"));
+    const user = JSON.parse(localStorage.getItem('Users'));
     if (user) {
       setIsLoggedIn(true);
       setUserName(`${user.firstName} ${user.lastName}`);
     }
-    const authChangeEvent = new CustomEvent("authChange", {
+    const authChangeEvent = new CustomEvent('authChange', {
       detail: { loggedIn: true, user },
     });
     window.dispatchEvent(authChangeEvent);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("Users");
+    localStorage.removeItem('Users');
     setIsLoggedIn(false);
-    setUserName("");
-    const authChangeEvent = new CustomEvent("authChange", {
+    setUserName('');
+    const authChangeEvent = new CustomEvent('authChange', {
       detail: { loggedIn: false },
     });
     window.dispatchEvent(authChangeEvent);
   };
 
-  const goToProfile = () => {
-    navigate("/profile");
-  };
-
   return (
     <div
       className={`max-w-screen-2xl container mx-auto md:px-20 px-4 ${
-        sticky ? "sticky-navbar shadow-md bg-base-200 duration-300 transition-all ease-in-out" : ""
+        sticky ? 'sticky-navbar shadow-md bg-base-200 duration-300 transition-all ease-in-out' : ''
       } bg-white text-black fixed z-50 left-0 right-0 top-0`}
     >
       <div className="navbar">
@@ -123,18 +127,9 @@ function Navbar() {
             </label>
           </div>
           {isLoggedIn ? (
-            <div className="flex items-center space-x-3">
-              <div className="relative">
-                <CgProfile
-                  className="w-10 h-10 cursor-pointer text-gray-700"
-                  onClick={goToProfile} />
-                <div className="absolute top-0 right-0 bg-red-500 rounded-full w-3 h-3"></div>
-              </div>
-                <span className="text-lg">{userName}</span>
-              <button onClick={handleLogout} className="btn btn-primary">Logout</button>
-            </div>
+            <ProfileDropdown userName={userName} onLogout={handleLogout} />
           ) : (
-            <button className="btn btn-primary" onClick={() => document.getElementById("my_modal_3").showModal()}>Login</button>
+            <button className="btn btn-primary" onClick={() => document.getElementById('my_modal_3').showModal()}>Login</button>
           )}
         </div>
       </div>

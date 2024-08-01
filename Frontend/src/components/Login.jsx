@@ -25,17 +25,24 @@ function Login({ onLoginSuccess }) {
         };
 
         try {
-            const res = await axios.post("http://localhost:4001/user/login", userInfo);
-            if (res.data) {
+            const response = await axios.post("http://localhost:4001/user/login", userInfo);
+            
+            if (response.status === 200) {
+                console.log('Login successful:', response.data);
                 toast.success("Logged in Successfully");
                 document.getElementById("my_modal_3").close();
-                localStorage.setItem("Users", JSON.stringify(res.data.user));
+                localStorage.setItem("Users", JSON.stringify(response.data.user));
+                localStorage.setItem("token", response.data.token); // Save the token in local storage
                 onLoginSuccess(); // Notify parent component of successful login
                 setTimeout(() => {
                     navigate(currentLocation || "/");
                 }, 1000);
+            } else {
+                console.error('Login failed with status:', response.status);
+                toast.error('Login failed');
             }
         } catch (err) {
+            console.error('Login error:', err);
             const errorMessage = err.response?.data?.message || "Login failed";
             setBackendError(errorMessage); // Update local state with error message
             toast.error(errorMessage); // Show error message in toast
@@ -69,7 +76,7 @@ function Login({ onLoginSuccess }) {
                                 id="email"
                                 type="email"
                                 placeholder="Enter your email"
-                                className="w-80 px-3 py-1 border rounded-md outline-none"
+                                className="w-80 px-3 py-1 border rounded-md outline-none bg-white"
                                 {...register("email", { required: "Email is required" })}
                             />
                             {errors.email && (
@@ -84,7 +91,7 @@ function Login({ onLoginSuccess }) {
                                 id="password"
                                 type="password"
                                 placeholder="Enter your password"
-                                className="w-80 px-3 py-1 border rounded-md outline-none"
+                                className="w-80 px-3 py-1 border rounded-md outline-none bg-white"
                                 {...register("password", { required: "Password is required" })}
                             />
                             {errors.password && (
@@ -94,29 +101,17 @@ function Login({ onLoginSuccess }) {
 
                         {/* Backend Error */}
                         {backendError && (
-                            <div className="mt-4 text-sm text-red-500">
-                                {backendError}
-                            </div>
+                            <div className="mt-4 text-sm text-red-500">{backendError}</div>
                         )}
 
-                        {/* Button */}
-                        <div className="flex justify-around mt-6">
-                            <button className="bg-pink-500 text-white rounded-md px-3 py-1 hover:bg-pink-700 duration-200">
-                                Login
-                            </button>
-                            <p>
-                                Not registered?{" "}
-                                <span
-                                    className="underline text-blue-500 cursor-pointer"
-                                    onClick={openSignupModal}
-                                >
-                                    Signup
-                                </span>
-                            </p>
+                        <div className="modal-action">
+                            <button type="submit" className="btn btn-primary">Login</button>
+                            <button type="button" className="btn btn-secondary" onClick={openSignupModal}>Sign Up</button>
                         </div>
                     </form>
                 </div>
             </dialog>
+
             <Signup />
         </div>
     );
