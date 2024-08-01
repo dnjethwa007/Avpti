@@ -6,23 +6,14 @@ import toast from "react-hot-toast";
 import Signup from "./Signup";
 
 function Login({ onLoginSuccess }) {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
-
-    const [backendError, setBackendError] = useState(""); // State for backend error
-
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [backendError, setBackendError] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
     const currentLocation = location.pathname;
 
     const onSubmit = async (data) => {
-        const userInfo = {
-            email: data.email,
-            password: data.password,
-        };
+        const userInfo = { email: data.email, password: data.password };
 
         try {
             const response = await axios.post("http://localhost:4001/user/login", userInfo);
@@ -30,13 +21,17 @@ function Login({ onLoginSuccess }) {
             if (response.status === 200) {
                 console.log('Login successful:', response.data);
                 toast.success("Logged in Successfully");
-                document.getElementById("my_modal_3").close();
                 localStorage.setItem("Users", JSON.stringify(response.data.user));
-                localStorage.setItem("token", response.data.token); // Save the token in local storage
-                onLoginSuccess(); // Notify parent component of successful login
-                setTimeout(() => {
-                    navigate(currentLocation || "/");
-                }, 1000);
+                localStorage.setItem("token", response.data.token);
+                
+                // Close the modal and trigger the success handler
+                const modal = document.getElementById("my_modal_3");
+                if (modal) modal.close();
+                
+                onLoginSuccess(); // Trigger login success callback
+                
+                // Refresh the page
+                window.location.reload();
             } else {
                 console.error('Login failed with status:', response.status);
                 toast.error('Login failed');
@@ -44,14 +39,22 @@ function Login({ onLoginSuccess }) {
         } catch (err) {
             console.error('Login error:', err);
             const errorMessage = err.response?.data?.message || "Login failed";
-            setBackendError(errorMessage); // Update local state with error message
-            toast.error(errorMessage); // Show error message in toast
+            setBackendError(errorMessage);
+            toast.error(errorMessage);
         }
     };
 
+    const handleCancel = () => {
+        const modal = document.getElementById("my_modal_3");
+        if (modal) modal.close();
+        navigate("/"); // Redirect to the home page
+    };
+
     const openSignupModal = () => {
-        document.getElementById("my_modal_3").close();
-        document.getElementById("signup_modal").showModal();
+        const loginModal = document.getElementById("my_modal_3");
+        const signupModal = document.getElementById("signup_modal");
+        if (loginModal) loginModal.close();
+        if (signupModal) signupModal.showModal();
     };
 
     return (
@@ -62,7 +65,7 @@ function Login({ onLoginSuccess }) {
                         <button
                             type="button"
                             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                            onClick={() => document.getElementById("my_modal_3").close()}
+                            onClick={handleCancel} // Use handleCancel for the cancel button
                         >
                             ✕
                         </button>
@@ -71,9 +74,9 @@ function Login({ onLoginSuccess }) {
 
                         {/* Email */}
                         <div className="mt-4 space-y-2">
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                            <label htmlFor="login-email" className="block text-sm font-medium text-gray-700">Email</label>
                             <input
-                                id="email"
+                                id="login-email"
                                 type="email"
                                 placeholder="Enter your email"
                                 className="w-80 px-3 py-1 border rounded-md outline-none bg-white"
@@ -86,9 +89,9 @@ function Login({ onLoginSuccess }) {
 
                         {/* Password */}
                         <div className="mt-4 space-y-2">
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                            <label htmlFor="login-password" className="block text-sm font-medium text-gray-700">Password</label>
                             <input
-                                id="password"
+                                id="login-password"
                                 type="password"
                                 placeholder="Enter your password"
                                 className="w-80 px-3 py-1 border rounded-md outline-none bg-white"
