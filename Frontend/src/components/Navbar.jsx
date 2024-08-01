@@ -3,28 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import Login from './Login';
 import DropdownMenu from './DropdownMenu';
 import ProfileDropdown from './ProfileDropdown';
+import Search from './Search';
 
 function Navbar() {
   const [sticky, setSticky] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
-
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setSticky(window.scrollY > 0);
-    };
+    const handleScroll = () => setSticky(window.scrollY > 0);
 
     window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    // Initial load
     const storedUser = localStorage.getItem('Users');
     if (storedUser) {
       const user = JSON.parse(storedUser);
@@ -34,13 +28,8 @@ function Navbar() {
 
     const handleAuthChange = (event) => {
       const { detail } = event;
-      if (detail.loggedIn) {
-        setIsLoggedIn(true);
-        setUserName(`${detail.user.firstName} ${detail.user.lastName}`);
-      } else {
-        setIsLoggedIn(false);
-        setUserName('');
-      }
+      setIsLoggedIn(detail.loggedIn);
+      setUserName(detail.loggedIn ? `${detail.user.firstName} ${detail.user.lastName}` : '');
     };
 
     const handleProfileUpdate = (event) => {
@@ -50,7 +39,6 @@ function Navbar() {
 
     window.addEventListener('authChange', handleAuthChange);
     window.addEventListener('profileUpdate', handleProfileUpdate);
-
     return () => {
       window.removeEventListener('authChange', handleAuthChange);
       window.removeEventListener('profileUpdate', handleProfileUpdate);
@@ -62,29 +50,19 @@ function Navbar() {
     if (user) {
       setIsLoggedIn(true);
       setUserName(`${user.firstName} ${user.lastName}`);
+      window.dispatchEvent(new CustomEvent('authChange', { detail: { loggedIn: true, user } }));
     }
-    const authChangeEvent = new CustomEvent('authChange', {
-      detail: { loggedIn: true, user },
-    });
-    window.dispatchEvent(authChangeEvent);
   };
 
   const handleLogout = () => {
     localStorage.removeItem('Users');
     setIsLoggedIn(false);
     setUserName('');
-    const authChangeEvent = new CustomEvent('authChange', {
-      detail: { loggedIn: false },
-    });
-    window.dispatchEvent(authChangeEvent);
+    window.dispatchEvent(new CustomEvent('authChange', { detail: { loggedIn: false } }));
   };
 
   return (
-    <div
-      className={`max-w-screen-2xl container mx-auto md:px-20 px-4 ${
-        sticky ? 'sticky-navbar shadow-md bg-base-200 duration-300 transition-all ease-in-out' : ''
-      } bg-white text-black fixed z-50 left-0 right-0 top-0`}
-    >
+    <div className={`max-w-screen-2xl container mx-auto md:px-20 px-4 ${sticky ? 'sticky-navbar shadow-md bg-base-200 duration-300 transition-all ease-in-out' : ''} bg-white text-black fixed z-50 left-0 right-0 top-0`}>
       <div className="navbar">
         <div className="navbar-start">
           <div className="dropdown">
@@ -93,10 +71,7 @@ function Navbar() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
               </svg>
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-            >
+            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
               <li><a href="/">Home</a></li>
               <li><a href="/course">Course</a></li>
               <li><a href="/contact">Contact</a></li>
@@ -115,16 +90,7 @@ function Navbar() {
             </ul>
           </div>
           <div className="hidden md:flex items-center ml-4">
-            <label className="flex items-center gap-2 px-3 py-2 rounded-md border">
-              <input
-                type="text"
-                className="shadow-none grow outline-none"
-                placeholder="Search"
-              />
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
-                <path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" />
-              </svg>
-            </label>
+            <Search />
           </div>
           {isLoggedIn ? (
             <ProfileDropdown userName={userName} onLogout={handleLogout} />
