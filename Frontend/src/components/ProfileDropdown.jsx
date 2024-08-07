@@ -1,16 +1,49 @@
 import React, { useState } from 'react';
-import { CgProfile } from 'react-icons/cg';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 function ProfileDropdown({ userName, onLogout }) {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleLogout = () => {
-    onLogout();
-    setIsOpen(false);
+  const handleLogout = async () => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      console.error('No token found in localStorage');
+      toast.error('Failed to log out: No token found');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:4001/user/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('Users'); // Remove user data from localStorage
+        onLogout(); // Notify parent component about logout
+        navigate('/'); // Redirect to home page
+        toast.success('Logged out successfully');
+      } else {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+    } catch (err) {
+      console.error('Error logging out:', err);
+      toast.error(`Failed to log out: ${err.message}`);
+    }
+    
+    setIsOpen(false); // Close the dropdown after logout
   };
 
   const firstInitial = userName.charAt(0).toUpperCase();
@@ -45,4 +78,3 @@ function ProfileDropdown({ userName, onLogout }) {
 }
 
 export default ProfileDropdown;
-

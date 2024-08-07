@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Signup from "./Signup";
+import ForgotPassword from "./ForgotPassword"; // Import the ForgotPassword component
 
 function Login({ onLoginSuccess }) {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -55,6 +56,14 @@ function Login({ onLoginSuccess }) {
         const signupModal = document.getElementById("signup_modal");
         if (loginModal) loginModal.close();
         if (signupModal) signupModal.showModal();
+    };
+
+    const openForgotPasswordModal = () => {
+        const loginModal = document.getElementById("my_modal_3");
+        const forgotPasswordModal = document.getElementById("forgot_password_modal");
+
+        if (loginModal) loginModal.close(); // Close the login modal
+        if (forgotPasswordModal) forgotPasswordModal.showModal(); // Open the forgot password modal
     };
 
     return (
@@ -110,9 +119,14 @@ function Login({ onLoginSuccess }) {
                         <div className="modal-action">
                             <button type="submit" className="btn btn-primary">Login</button>
                             <button type="button" className="btn btn-secondary" onClick={openSignupModal}>Sign Up</button>
+                            <button type="button" className="btn btn-link" onClick={openForgotPasswordModal}>Forgot Password?</button>
                         </div>
                     </form>
                 </div>
+            </dialog>
+
+            <dialog id="forgot_password_modal" className="modal">
+                <ForgotPassword />
             </dialog>
 
             <Signup />

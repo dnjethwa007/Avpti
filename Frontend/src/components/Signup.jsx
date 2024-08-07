@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 function Signup() {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [backendError, setBackendError] = useState(null);
-  const { register, handleSubmit, setValue, formState: { errors }, watch } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors }, watch, reset } = useForm();
 
   const watchPassword = watch("password");
   const watchConfirmPassword = watch("confirmPassword");
@@ -47,8 +47,9 @@ function Signup() {
       toast.success("Registration Successful");
       document.getElementById("signup_modal").close();
       setTimeout(() => {
-        document.getElementById("my_modal_3").showModal();
+        document.getElementById("complete_registration_modal").showModal();
       }, 1000);
+      reset(); // Clear the form fields
       setBackendError(null); // Clear any previous error
     } catch (err) {
       console.error("Error during registration:", err);
@@ -71,183 +72,207 @@ function Signup() {
   };
 
   return (
-    <dialog id="signup_modal" className="modal">
-      <div className="modal-box">
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <h3 className="font-bold text-lg mb-4">
-            {isOtpSent ? "Complete Registration" : "Sign Up"}
-          </h3>
+    <>
+      <dialog id="signup_modal" className="modal">
+        <div className="modal-box relative">
+          {/* Close Icon */}
+          <button
+            type="button"
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-900"
+            onClick={() => document.getElementById("signup_modal").close()}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          
+          <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <h3 className="font-bold text-lg mb-4">
+              {isOtpSent ? "Complete Registration" : "Sign Up"}
+            </h3>
 
-          {backendError && (
-            <div className="text-sm text-red-500 mb-4">
-              {backendError}
-            </div>
-          )}
-
-          {!isOtpSent ? (
-            <>
-              {/* First Name */}
-              <div className="mt-4 space-y-2">
-                <label htmlFor="firstName">First Name</label>
-                <input
-                  id="firstName"
-                  type="text"
-                  placeholder="Enter your first name"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
-                  autoComplete="off"
-                  {...register("firstName", { 
-                    required: "This field is required",
-                  })}
-                  onChange={handleInputChange}
-                />
-                {errors.firstName && (
-                  <span className="text-sm text-red-500">{errors.firstName.message}</span>
-                )}
+            {backendError && (
+              <div className="text-sm text-red-500 mb-4">
+                {backendError}
               </div>
+            )}
 
-              {/* Last Name */}
-              <div className="mt-4 space-y-2">
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                  id="lastName"
-                  type="text"
-                  placeholder="Enter your last name"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
-                  autoComplete="off"
-                  {...register("lastName", {
-                    required: "This field is required",
-                  })}
-                  onChange={handleInputChange}
-                />
-                {errors.lastName && (
-                  <span className="text-sm text-red-500">{errors.lastName.message}</span>
-                )}
-              </div>
+            {!isOtpSent ? (
+              <>
+                {/* First Name */}
+                <div className="mt-4 space-y-2">
+                  <label htmlFor="firstName">First Name</label>
+                  <input
+                    id="firstName"
+                    type="text"
+                    placeholder="Enter your first name"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
+                    autoComplete="off"
+                    {...register("firstName", {
+                      required: "This field is required",
+                    })}
+                    onChange={handleInputChange}
+                  />
+                  {errors.firstName && (
+                    <span className="text-sm text-red-500">{errors.firstName.message}</span>
+                  )}
+                </div>
 
-              {/* Email */}
-              <div className="mt-4 space-y-2">
-                <label htmlFor="email">Email</label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
-                  autoComplete="off"
-                  {...register("email", {
-                    required: "This field is required",
-                  })}
-                  onChange={handleInputChange}
-                />
-                {errors.email && (
-                  <span className="text-sm text-red-500">{errors.email.message}</span>
-                )}
-              </div>
+                {/* Last Name */}
+                <div className="mt-4 space-y-2">
+                  <label htmlFor="lastName">Last Name</label>
+                  <input
+                    id="lastName"
+                    type="text"
+                    placeholder="Enter your last name"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
+                    autoComplete="off"
+                    {...register("lastName", {
+                      required: "This field is required",
+                    })}
+                    onChange={handleInputChange}
+                  />
+                  {errors.lastName && (
+                    <span className="text-sm text-red-500">{errors.lastName.message}</span>
+                  )}
+                </div>
 
-              {/* Send OTP Button */}
-              <div className="flex justify-center mt-6">
-                <button
-                  type="submit"
-                  className="bg-pink-500 text-white rounded-md px-4 py-2 hover:bg-pink-700 duration-200"
-                >
-                  Send OTP
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* OTP */}
-              <div className="mt-4 space-y-2">
-                <label htmlFor="otp">OTP</label>
-                <input
-                  id="otp"
-                  type="text"
-                  placeholder="Enter OTP"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
-                  autoComplete="off"
-                  {...register("otp", {
-                    required: "This field is required",
-                    pattern: {
-                      value: /^[0-9]{6}$/, // Validate 6-digit OTP
-                      message: "Enter a valid 6-digit OTP"
-                    }
-                  })}
-                  onChange={handleInputChange}
-                />
-                {errors.otp && (
-                  <span className="text-sm text-red-500">{errors.otp.message}</span>
-                )}
-              </div>
+                {/* Email */}
+                <div className="mt-4 space-y-2">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
+                    autoComplete="off"
+                    {...register("email", {
+                      required: "This field is required",
+                    })}
+                    onChange={handleInputChange}
+                  />
+                  {errors.email && (
+                    <span className="text-sm text-red-500">{errors.email.message}</span>
+                  )}
+                </div>
 
-              {/* Password */}
-              <div className="mt-4 space-y-2">
-                <label htmlFor="password">Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
-                  autoComplete="off"
-                  {...register("password", { 
-                    required: "This field is required",
-                    pattern: {
-                      value: /^[A-Z][a-z0-9]*$/, // First letter uppercase, rest can be lowercase letters or digits
-                      message: "Password must start with an uppercase letter, followed by lowercase letters or digits"
-                    },
-                    minLength: {
-                      value: 6,
-                      message: "Password must be at least 6 characters long"
-                    },
-                    maxLength: {
-                      value: 10,
-                      message: "Password must be no more than 10 characters long"
-                    }
-                  })}
-                  onChange={handleInputChange}
-                />
-                {errors.password && (
-                  <span className="text-sm text-red-500">{errors.password.message}</span>
-                )}
-              </div>
- 
+                {/* Send OTP Button */}
+                <div className="flex justify-center mt-6">
+                  <button
+                    type="submit"
+                    className="bg-pink-500 text-white rounded-md px-4 py-2 hover:bg-pink-700 duration-200"
+                  >
+                    Send OTP
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* OTP */}
+                <div className="mt-4 space-y-2">
+                  <label htmlFor="otp">OTP</label>
+                  <input
+                    id="otp"
+                    type="text"
+                    placeholder="Enter OTP"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
+                    autoComplete="off"
+                    {...register("otp", {
+                      required: "This field is required",
+                      pattern: {
+                        value: /^[0-9]{6}$/, // Validate 6-digit OTP
+                        message: "Enter a valid 6-digit OTP"
+                      }
+                    })}
+                    onChange={handleInputChange}
+                  />
+                  {errors.otp && (
+                    <span className="text-sm text-red-500">{errors.otp.message}</span>
+                  )}
+                </div>
 
-              {/* Confirm Password */}
-              <div className="mt-4 space-y-2">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="Confirm your password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
-                  autoComplete="off"
-                  {...register("confirmPassword", { 
-                    required: "This field is required"
-                  })}
-                  onChange={handleInputChange}
-                />
-                {errors.confirmPassword && (
-                  <span className="text-sm text-red-500">{errors.confirmPassword.message}</span>
-                )}
-              </div>
+                {/* Password */}
+                <div className="mt-4 space-y-2">
+                  <label htmlFor="password">Password</label>
+                  <input
+                    id="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
+                    autoComplete="off"
+                    {...register("password", {
+                      required: "This field is required",
+                      pattern: {
+                        value: /^[A-Z][a-z0-9]*$/, // First letter uppercase, rest can be lowercase letters or digits
+                        message: "Password must start with an uppercase letter, followed by lowercase letters or digits"
+                      },
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters long"
+                      },
+                      maxLength: {
+                        value: 10,
+                        message: "Password must be no more than 10 characters long"
+                      }
+                    })}
+                    onChange={handleInputChange}
+                  />
+                  {errors.password && (
+                    <span className="text-sm text-red-500">{errors.password.message}</span>
+                  )}
+                </div>
 
-              {/* Password Mismatch Error */}
-              {watchPassword !== watchConfirmPassword && isOtpSent && (
-                <span className="text-sm text-red-500 mt-2">Passwords do not match</span>
-              )}
+                {/* Confirm Password */}
+                <div className="mt-4 space-y-2">
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="Confirm your password"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white outline-none"
+                    autoComplete="off"
+                    {...register("confirmPassword", {
+                      required: "This field is required",
+                      validate: value =>
+                        value === watchPassword || "Passwords do not match"
+                    })}
+                    onChange={handleInputChange}
+                  />
+                  {errors.confirmPassword && (
+                    <span className="text-sm text-red-500">{errors.confirmPassword.message}</span>
+                  )}
+                </div>
 
-              {/* Sign Up Button */}
-              <div className="flex justify-center mt-6">
-                <button
-                  type="submit"
-                  className="bg-pink-500 text-white rounded-md px-4 py-2 hover:bg-pink-700 duration-200"
-                >
-                  Sign Up
-                </button>
-              </div>
-            </>
-          )}
-        </form>
-      </div>
-    </dialog>
+                {/* Sign Up Button */}
+                <div className="flex justify-center mt-6">
+                  <button
+                    type="submit"
+                    className="bg-pink-500 text-white rounded-md px-4 py-2 hover:bg-pink-700 duration-200"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              </>
+            )}
+          </form>
+        </div>
+      </dialog>
+
+      <dialog id="complete_registration_modal" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Registration Successful</h3>
+          <div className="mt-4 flex justify-center">
+            <button
+              type="button"
+              className="bg-pink-500 text-white rounded-md px-4 py-2 hover:bg-pink-700 duration-200"
+              onClick={() => document.getElementById("complete_registration_modal").close()}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </dialog>
+    </>
   );
 }
 

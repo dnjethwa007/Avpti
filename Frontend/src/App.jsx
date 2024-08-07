@@ -1,7 +1,9 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './Home/Home';
+import AboutUs from './components/AboutUs';
 import Course from './Course/Courses';
+import TermsAndConditions from './components/TermsAndConditions';
 import Sem from './Sem/Sem';
 import SemDetails from './Sem/SemDetails';
 import SubjectDetails from './Sem/SubjectDetails';
@@ -17,6 +19,8 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/course" element={<Course />} />
+                <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
+                <Route path="/about" element={<AboutUs />} />
                 <Route element={<PrivateRoute />}>
                     <Route path="/course/:courseTitle" element={<Sem />} />
                     <Route path="/course/:courseTitle/:semId" element={<SemDetails />} />

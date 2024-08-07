@@ -165,6 +165,74 @@ app.post("/user/verify-otp", async (req, res) => {
     }
 });
 
+const crypto = require('crypto');
+
+app.post('/user/send-reset-link', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Generate a 6-digit OTP
+        const otp = (crypto.randomInt(100000, 1000000)).toString(); // Generate a number between 100000 and 999999
+        const otpExpires = Date.now() + 60 * 60 * 1000; // OTP expires in 1 hour
+
+        // Save OTP and expiration time to the user
+        user.otp = otp;
+        user.otpExpires = otpExpires;
+        await user.save();
+
+        // Send OTP to user's email
+        await transporter.sendMail({
+            from: process.env.EMAIL,
+            to: email,
+            subject: 'Password Reset OTP',
+            text: `Your OTP for password reset is: ${otp}. It is valid for 1 hour.`
+        });
+
+        console.log(`Password reset OTP sent successfully to ${email}`);
+        res.status(200).json({ message: 'Password reset OTP sent successfully' });
+    } catch (error) {
+        console.error('Error sending OTP:', error);
+        res.status(500).json({ error: 'Error sending OTP', details: error.message });
+    }
+});
+
+
+app.post('/user/reset-password', async (req, res) => {
+    const { email, otp, newPassword } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Check if OTP matches and is not expired
+        if (user.otp !== otp || Date.now() > user.otpExpires) {
+            return res.status(400).json({ error: 'Invalid or expired OTP' });
+        }
+
+        // Hash the new password before saving
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.otp = undefined;        // Clear OTP
+        user.otpExpires = undefined; // Clear OTP expiration
+        await user.save();
+
+        console.log(`Password reset successfully for ${email}`);
+        res.status(200).json({ message: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Error resetting password:', error);
+        res.status(500).json({ error: 'Error resetting password', details: error.message });
+    }
+});
+
+
+
+
 // Handle Logout
 app.post("/user/logout", authenticateToken, (req, res) => {
     console.log('User logged out');
@@ -187,7 +255,7 @@ app.get('/user/profile', authenticateToken, async (req, res) => {
 app.put('/user/profile', authenticateToken, async (req, res) => {
     const { firstName, lastName, email } = req.body;
 
-    if (!firstName || !lastName || !email) {
+    if (!firstName || !lastName) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
@@ -197,7 +265,6 @@ app.put('/user/profile', authenticateToken, async (req, res) => {
 
         user.firstName = firstName;
         user.lastName = lastName;
-        user.email = email;
 
         await user.save();
         res.status(200).json({ user });
@@ -215,6 +282,10 @@ app.put('/user/change-password', authenticateToken, async (req, res) => {
 
     if (!currentPassword || !newPassword) {
         return res.status(400).json({ error: 'Current and new passwords are required' });
+    }
+
+    if (currentPassword === newPassword) {
+        return res.status(400).json({ error: 'New password must be different from the current password' });
     }
 
     try {
@@ -239,6 +310,7 @@ app.put('/user/change-password', authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 
 const PORT = process.env.PORT || 4000;

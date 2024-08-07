@@ -10,7 +10,7 @@ function Course() {
     <>
       <Navbar />
       <div className='max-w-screen-2xl container mx-auto md:px-20 px-4 dark:bg-slate-900 dark:text-white'>
-        <div className='mt-17 flex flex-col items-center text-center'>
+        <div className='mt-14 flex flex-col items-center text-center'>
           <h1 className='text-2xl md:text-4xl mt-8'>
             Here Are <span className='text-pink-500'>AVPTI Courses :)</span>
           </h1>

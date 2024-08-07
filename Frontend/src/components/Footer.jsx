@@ -8,19 +8,20 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 mb-10 gap-10">
           <div>
             <h3 className="text-lg font-semibold mb-4">
-              <img src="http://www.avpt.cteguj.in/uploads/4732/logo.png" alt="Logo" />
+              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F4.bp.blogspot.com%2F-OXBEblSf80E%2FXIs6dS_d_NI%2FAAAAAAAAAdg%2FXvLe0EmM368OQJOuv3wbY2QVlsOtJYxGgCK4BGAYYCw%2Fs1600%2Ffacebook_cover_photo_1.png&f=1&nofb=1&ipt=02c8681f83e6cfbf38b0ab9d4b677ae3cfb2734ec0554114486d3a43f9b48c5b&ipo=images" alt="Logo" />
             </h3>
             <p className="text-sm leading-relaxed">
-              A. V. PAREKH TECHNICAL INSTITUTE, RAJKOT
+              Material Adda, RAJKOT
             </p>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="text-sm leading-relaxed">
-              <li><a href="/" className="hover:text-white transition-colors">Home</a></li>
-              <li><a href="/about" className="hover:text-white transition-colors">About</a></li>
-              <li><a href="/course" className="hover:text-white transition-colors">Courses</a></li>
-              <li><a href="/contact" className="hover:text-white transition-colors">Contact</a></li>
+              <li><a href="/" className="hover:text-pink-500 transition-colors">Home</a></li>
+              <li><a href="/about" className="hover:text-pink-500 transition-colors">About</a></li>
+              <li><a href="/course" className="hover:text-pink-500 transition-colors">Courses</a></li>
+              <li><a href="/TermsAndConditions" className="hover:text-pink-500 transition-colors">Terms & Conditions</a></li>
+              <li><a href="/contact" className="hover:text-pink-500 transition-colors">Contact</a></li>
             </ul>
           </div>
           <div>
@@ -54,7 +55,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="text-center text-gray-500">
-          &copy; {new Date().getFullYear()} A. V. PAREKH TECHNICAL INSTITUTE. All rights reserved.
+          &copy; {new Date().getFullYear()} Material Adda. All rights reserved.
         </div>
       </div>
     </footer>
