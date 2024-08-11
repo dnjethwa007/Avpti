@@ -2,7 +2,10 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Define your API base URL and endpoints
 const API_BASE_URL = "https://avpti-backed.onrender.com";
+<<<<<<< HEAD
 // const API_BASE_URL = "http://localhost:4001";
+=======
+>>>>>>> ab9745cd071cb570618eb30c90f255870a3e636e
 
 export const API_ENDPOINTS = {
     PROFILE: `${API_BASE_URL}/user/profile`,
