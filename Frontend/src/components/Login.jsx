@@ -5,6 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Signup from "./Signup";
 import ForgotPassword from "./ForgotPassword"; // Import the ForgotPassword component
+import { useStore } from "./storeContext"; // Import the useStore hook
 
 function Login({ onLoginSuccess }) {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -12,12 +13,13 @@ function Login({ onLoginSuccess }) {
     const navigate = useNavigate();
     const location = useLocation();
     const currentLocation = location.pathname;
+    const { API_ENDPOINTS } = useStore(); // Access the API endpoints from context
 
     const onSubmit = async (data) => {
         const userInfo = { email: data.email, password: data.password };
 
         try {
-            const response = await axios.post("http://localhost:4001/user/login", userInfo);
+            const response = await axios.post(API_ENDPOINTS.LOGIN, userInfo);
             
             if (response.status === 200) {
                 console.log('Login successful:', response.data);

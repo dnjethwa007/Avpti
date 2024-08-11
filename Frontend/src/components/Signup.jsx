@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { API_ENDPOINTS } from "./storeContext"; // Import the API endpoints
 
 function Signup() {
   const [isOtpSent, setIsOtpSent] = useState(false);
@@ -16,7 +17,7 @@ function Signup() {
 
     try {
       console.log("Sending OTP to:", email); // Log email for debugging
-      await axios.post("http://localhost:4001/user/send-otp", { email });
+      await axios.post(API_ENDPOINTS.SEND_OTP, { email }); // Use the endpoint from storeContext
       toast.success("OTP sent to your email");
       console.log("OTP sent successfully"); // Log success message
       setIsOtpSent(true);
@@ -43,7 +44,7 @@ function Signup() {
     };
 
     try {
-      await axios.post("http://localhost:4001/user/verify-otp", userInfo);
+      await axios.post(API_ENDPOINTS.VERIFY_OTP, userInfo); // Use the endpoint from storeContext
       toast.success("Registration Successful");
       document.getElementById("signup_modal").close();
       setTimeout(() => {
@@ -258,10 +259,12 @@ function Signup() {
         </div>
       </dialog>
 
+      {/* Complete Registration Modal */}
       <dialog id="complete_registration_modal" className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Registration Successful</h3>
-          <div className="mt-4 flex justify-center">
+          <p className="py-4">Please check your email to verify your account.</p>
+          <div className="flex justify-end">
             <button
               type="button"
               className="bg-pink-500 text-white rounded-md px-4 py-2 hover:bg-pink-700 duration-200"

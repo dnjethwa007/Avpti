@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useStore } from './storeContext'; // Import useStore
 
 const Profile = () => {
-    const [user, setUser] = useState(null);
+    const { user: currentUser, setUser, API_ENDPOINTS } = useStore(); // Destructure API_ENDPOINTS and user from useStore
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Profile = () => {
             return;
         }
 
-        fetch('http://localhost:4001/user/profile', {
+        fetch(API_ENDPOINTS.PROFILE, {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${token}` }
         })
@@ -38,7 +39,7 @@ const Profile = () => {
                 console.error('Error fetching user data:', err);
                 setError('Failed to fetch user data');
             });
-    }, [setValue]);
+    }, [API_ENDPOINTS.PROFILE, setUser, setValue]);
 
     useEffect(() => {
         let timer;
@@ -62,7 +63,7 @@ const Profile = () => {
         setError(null);
 
         const token = localStorage.getItem('token');
-        fetch('http://localhost:4001/user/profile', {
+        fetch(API_ENDPOINTS.PROFILE, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -104,7 +105,7 @@ const Profile = () => {
         setError(null);
 
         const token = localStorage.getItem('token');
-        fetch('http://localhost:4001/user/change-password', {
+        fetch(API_ENDPOINTS.CHANGE_PASSWORD, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -131,7 +132,7 @@ const Profile = () => {
 
     const handleLogout = () => {
         const token = localStorage.getItem('token');
-        fetch('http://localhost:4001/user/logout', {
+        fetch(API_ENDPOINTS.LOGOUT, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` }
         })
@@ -164,7 +165,7 @@ const Profile = () => {
                         {success}
                     </div>
                 )}
-                {user ? (
+                {currentUser ? (
                     <form onSubmit={handleSubmit(handleUpdateProfile)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <h2 className="text-lg font-semibold mb-2">Update Profile</h2>
@@ -238,19 +239,21 @@ const Profile = () => {
                             <button
                                 type="button"
                                 onClick={handleSubmit(handleChangePassword)}
-                                className="bg-green-500 text-white p-2 rounded"
+                                className="bg-blue-500 text-white p-2 rounded"
                             >
                                 Change Password
                             </button>
                         </div>
                     </form>
                 ) : (
-                    <div>Loading...</div>
+                    <div className="text-center">
+                        <p className="text-lg">Please log in to view your profile.</p>
+                    </div>
                 )}
-                <div className="flex justify-center mt-10">
+                <div className="text-center mt-4">
                     <button
                         onClick={handleLogout}
-                        className="bg-red-500 text-white text-xl px-9 py-5 rounded"
+                        className="bg-red-500 text-white p-2 rounded"
                     >
                         Logout
                     </button>

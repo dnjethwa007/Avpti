@@ -3,18 +3,20 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "./storeContext"; // Import useStore
 
-function ForgotPassword({ onResetSuccess }) { // Accept onResetSuccess as a prop
+function ForgotPassword({ onResetSuccess }) {
+    const { API_ENDPOINTS } = useStore(); // Access API endpoints from context
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [isLinkSent, setIsLinkSent] = useState(false);
     const [backendError, setBackendError] = useState(null);
-    const navigate = useNavigate(); // Hook to navigate programmatically
+    const navigate = useNavigate();
 
     const handleSendResetLink = async (data) => {
         const { email } = data;
 
         try {
-            await axios.post("http://localhost:4001/user/send-reset-link", { email });
+            await axios.post(API_ENDPOINTS.SEND_RESET_LINK, { email });
             toast.success("Reset link sent to your email");
             setIsLinkSent(true);
             setBackendError(null);
@@ -34,19 +36,17 @@ function ForgotPassword({ onResetSuccess }) { // Accept onResetSuccess as a prop
         }
 
         try {
-            await axios.post("http://localhost:4001/user/reset-password", { email, otp, newPassword });
+            await axios.post(API_ENDPOINTS.RESET_PASSWORD, { email, otp, newPassword });
             toast.success("Password reset successful");
             setBackendError(null);
 
-            // Call onResetSuccess callback to open the login modal
             if (onResetSuccess) onResetSuccess();
 
-            // Close the forgot password modal
             const modal = document.getElementById("forgot_password_modal");
             if (modal) {
                 modal.close();
                 setTimeout(() => {
-                    document.getElementById("my_modal_3")?.showModal(); // Open login modal
+                    document.getElementById("my_modal_3")?.showModal();
                 }, 1000);
             }
         } catch (err) {
@@ -67,7 +67,7 @@ function ForgotPassword({ onResetSuccess }) { // Accept onResetSuccess as a prop
     const handleCancel = () => {
         const modal = document.getElementById("forgot_password_modal");
         if (modal) modal.close();
-        navigate("/"); // Navigate to home page
+        navigate("/");
     };
 
     return (
@@ -75,7 +75,7 @@ function ForgotPassword({ onResetSuccess }) { // Accept onResetSuccess as a prop
             <button
                 type="button"
                 className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                onClick={handleCancel} // Handle cancel button click
+                onClick={handleCancel}
             >
                 ✕
             </button>

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { useStore } from './storeContext'; // Import useStore from StoreContext
 
 function ProfileDropdown({ userName, onLogout }) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { API_ENDPOINTS } = useStore(); // Access API endpoints from context
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -20,7 +22,7 @@ function ProfileDropdown({ userName, onLogout }) {
     }
 
     try {
-      const response = await fetch('http://localhost:4001/user/logout', {
+      const response = await fetch(API_ENDPOINTS.LOGOUT, { // Use API endpoint from context
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
