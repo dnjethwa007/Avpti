@@ -71,7 +71,7 @@ function Banner() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 p-4">
             <div className="text-center text-white">
               <h1 className="text-xl md:text-3xl font-bold mb-4">
-                Learn New Books For <br /> Build Your Career...!!!
+             
               </h1>
               <button
                 onClick={handleLearnMoreClick}
