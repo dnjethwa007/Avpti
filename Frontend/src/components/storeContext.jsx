@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Define your API base URL and endpoints
-const API_BASE_URL = "https://material-adda-u4t8.onrender.com";
+const API_BASE_URL = "https://avpti-backed.onrender.com";
 
 export const API_ENDPOINTS = {
     PROFILE: `${API_BASE_URL}/user/profile`,
