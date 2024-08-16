@@ -5,8 +5,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const User = require('./models/User'); // Ensure User model is defined properly
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const User = require('./models/User'); // Ensure User model is defined properly
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,7 +20,7 @@ app.use(cors({
 }));
 
 // Nodemailer setup
-let transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
     secure: true, // true for 465, false for other ports
@@ -56,6 +57,7 @@ app.get("/", (req, res) => {
     res.send("Server is running");
 });
 
+// User Login Route
 app.post("/user/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -92,6 +94,7 @@ app.post("/user/login", async (req, res) => {
     }
 });
 
+// Send OTP Route
 app.post("/user/send-otp", async (req, res) => {
     const { email } = req.body;
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -123,6 +126,35 @@ app.post("/user/send-otp", async (req, res) => {
     }
 });
 
+app.delete("/user/cancel-otp", async (req, res) => {
+    const { email } = req.body;
+    console.log("Received DELETE request to cancel OTP with email:", email); // Log the email
+
+    try {
+        if (!email) {
+            console.log("Error: No email provided in request");
+            return res.status(400).json({ error: 'Email is required' });
+        }
+
+        // Delete the user from the database
+        const result = await User.deleteOne({ email });
+
+        if (result.deletedCount === 0) {
+            console.log(`Error: User with email ${email} not found`);
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        console.log(`User with email ${email} deleted successfully`);
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting user:', error.message);
+        res.status(500).json({ error: 'Error deleting user', details: error.message });
+    }
+});
+
+
+
+// Verify OTP Route
 app.post("/user/verify-otp", async (req, res) => {
     const { firstName, lastName, email, otp, password, confirmPassword } = req.body;
 
@@ -165,8 +197,7 @@ app.post("/user/verify-otp", async (req, res) => {
     }
 });
 
-const crypto = require('crypto');
-
+// Send Reset Link Route
 app.post('/user/send-reset-link', async (req, res) => {
     const { email } = req.body;
 
@@ -201,7 +232,7 @@ app.post('/user/send-reset-link', async (req, res) => {
     }
 });
 
-
+// Reset Password Route
 app.post('/user/reset-password', async (req, res) => {
     const { email, otp, newPassword } = req.body;
 
@@ -230,10 +261,35 @@ app.post('/user/reset-password', async (req, res) => {
     }
 });
 
+// Contact Form Route
+app.post('/contact', async (req, res) => {
+    const { firstName, lastName, email, message } = req.body;
 
+    if (!firstName || !lastName || !email || !message) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
 
+    try {
+        await transporter.sendMail({
+            from: process.env.EMAIL,
+            to: process.env.EMAIL, // Your email address
+            subject: 'Contact Us Form Submission',
+            text: `
+                First Name: ${firstName}
+                Last Name: ${lastName}
+                Email: ${email}
+                Message: ${message}
+            `
+        });
 
-// Handle Logout
+        res.status(200).json({ message: 'Message sent successfully' });
+    } catch (error) {
+        console.error('Error sending contact email:', error);
+        res.status(500).json({ error: 'Error sending message' });
+    }
+});
+
+// Handle Logout Route
 app.post("/user/logout", authenticateToken, (req, res) => {
     console.log('User logged out');
     res.status(200).json({ message: "Logged out successfully" });
@@ -274,8 +330,6 @@ app.put('/user/profile', authenticateToken, async (req, res) => {
     }
 });
 
-
-
 // Change Password Route
 app.put('/user/change-password', authenticateToken, async (req, res) => {
     const { currentPassword, newPassword } = req.body;
@@ -311,7 +365,6 @@ app.put('/user/change-password', authenticateToken, async (req, res) => {
     }
 });
 
-
-
+// Start the server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

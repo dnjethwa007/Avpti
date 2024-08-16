@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: { type: String, required: false },
+    lastName: { type: String, required: false },
     email: { type: String, required: true, unique: true },
     otp: { type: String },          // Field to store OTP
     otpExpires: { type: Date },     // Field to store OTP expiration time
-    password: { type: String, required: true }
+    password: { type: String, required: false }
 });
 
 // Adding a virtual field for full name

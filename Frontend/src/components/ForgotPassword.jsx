@@ -10,6 +10,7 @@ function ForgotPassword({ onResetSuccess }) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [isLinkSent, setIsLinkSent] = useState(false);
     const [backendError, setBackendError] = useState(null);
+    const [email, setEmail] = useState(""); // State to store email
     const navigate = useNavigate();
 
     const handleSendResetLink = async (data) => {
@@ -18,6 +19,7 @@ function ForgotPassword({ onResetSuccess }) {
         try {
             await axios.post(API_ENDPOINTS.SEND_RESET_LINK, { email });
             toast.success("Reset link sent to your email");
+            setEmail(email); // Store email
             setIsLinkSent(true);
             setBackendError(null);
         } catch (err) {
@@ -28,7 +30,7 @@ function ForgotPassword({ onResetSuccess }) {
     };
 
     const handleResetPassword = async (data) => {
-        const { email, otp, newPassword, confirmPassword } = data;
+        const { otp, newPassword, confirmPassword } = data;
 
         if (newPassword !== confirmPassword) {
             toast.error("Passwords do not match");
@@ -88,26 +90,22 @@ function ForgotPassword({ onResetSuccess }) {
             )}
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                {!isLinkSent ? (
-                    <>
-                        <div className="mt-4">
-                            <label htmlFor="email">Email</label>
-                            <input
-                                id="email"
-                                type="email"
-                                placeholder="Enter your email"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                                {...register("email", { required: "Email is required" })}
-                            />
-                            {errors.email && (
-                                <span className="text-sm text-red-500">{errors.email.message}</span>
-                            )}
-                        </div>
-                        <div className="flex justify-center mt-4">
-                            <button type="submit" className="btn btn-primary">Send Reset Link</button>
-                        </div>
-                    </>
-                ) : (
+                {!isLinkSent && (
+                    <div className="mt-4">
+                        <label htmlFor="email">Email</label>
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder="Enter your email"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            {...register("email", { required: "Email is required" })}
+                        />
+                        {errors.email && (
+                            <span className="text-sm text-red-500">{errors.email.message}</span>
+                        )}
+                    </div>
+                )}
+                {isLinkSent && (
                     <>
                         <div className="mt-4">
                             <label htmlFor="otp">Reset OTP</label>
@@ -148,11 +146,13 @@ function ForgotPassword({ onResetSuccess }) {
                                 <span className="text-sm text-red-500">{errors.confirmPassword.message}</span>
                             )}
                         </div>
-                        <div className="flex justify-center mt-4">
-                            <button type="submit" className="btn btn-primary">Reset Password</button>
-                        </div>
                     </>
                 )}
+                <div className="flex justify-center mt-4">
+                    <button type="submit" className="btn btn-primary">
+                        {isLinkSent ? "Reset Password" : "Send Reset Link"}
+                    </button>
+                </div>
             </form>
         </div>
     );

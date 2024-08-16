@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useStore } from './storeContext'; // Import useStore
+import { useStore } from './storeContext';
 
 const Profile = () => {
-    const { user: currentUser, setUser, API_ENDPOINTS } = useStore(); // Destructure API_ENDPOINTS and user from useStore
+    const { user: currentUser, setUser, API_ENDPOINTS } = useStore();
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const navigate = useNavigate();
 
-    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
-    const currentPassword = watch('currentPassword');
+    // UseForm hooks for each form separately
+    const { register: registerProfile, handleSubmit: handleSubmitProfile, setValue, formState: { errors: profileErrors } } = useForm();
+    const { register: registerPassword, handleSubmit: handleSubmitPassword, watch, formState: { errors: passwordErrors } } = useForm();
+
     const newPassword = watch('newPassword');
-    const confirmNewPassword = watch('confirmNewPassword');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -45,10 +46,10 @@ const Profile = () => {
         let timer;
         if (success) {
             timer = setTimeout(() => {
-                setSuccess(null); // Remove success message after 10 seconds
+                setSuccess(null);
             }, 10000);
         }
-        return () => clearTimeout(timer); // Clear timer on component unmount or when success changes
+        return () => clearTimeout(timer);
     }, [success]);
 
     const handleUpdateProfile = data => {
@@ -59,7 +60,6 @@ const Profile = () => {
             return;
         }
 
-        // Clear any previous error message
         setError(null);
 
         const token = localStorage.getItem('token');
@@ -78,11 +78,8 @@ const Profile = () => {
                 } else {
                     setSuccess('Profile updated successfully');
                     setUser(data.user);
-
-                    // Save updated profile info to localStorage
                     localStorage.setItem('Users', JSON.stringify(data.user));
 
-                    // Dispatch a custom event for profile update
                     const profileUpdateEvent = new CustomEvent('profileUpdate', {
                         detail: data.user
                     });
@@ -101,7 +98,6 @@ const Profile = () => {
             return;
         }
 
-        // Clear any previous error message
         setError(null);
 
         const token = localStorage.getItem('token');
@@ -119,9 +115,6 @@ const Profile = () => {
                     setError(data.error);
                 } else {
                     setSuccess('Password changed successfully');
-                    setValue('currentPassword', '');
-                    setValue('newPassword', '');
-                    setValue('confirmNewPassword', '');
                 }
             })
             .catch(err => {
@@ -139,7 +132,7 @@ const Profile = () => {
             .then(response => {
                 if (response.ok) {
                     localStorage.removeItem('token');
-                    localStorage.removeItem('Users'); // Remove user data from localStorage
+                    localStorage.removeItem('Users');
                     navigate('/');
                 } else {
                     return response.text().then(text => { throw new Error(text); });
@@ -166,12 +159,13 @@ const Profile = () => {
                     </div>
                 )}
                 {currentUser ? (
-                    <form onSubmit={handleSubmit(handleUpdateProfile)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Update Profile Form */}
+                        <form onSubmit={handleSubmitProfile(handleUpdateProfile)} className="mb-6">
                             <h2 className="text-lg font-semibold mb-2">Update Profile</h2>
                             <input
                                 type="text"
-                                {...register('name', {
+                                {...registerProfile('name', {
                                     required: 'Name is required',
                                     pattern: {
                                         value: /^[A-Za-z]+(?: [A-Za-z]+){1}$/,
@@ -179,35 +173,37 @@ const Profile = () => {
                                     }
                                 })}
                                 placeholder="Name (First Last)"
-                                className={`border p-2 mb-2 w-full ${errors.name ? 'border-red-500' : ''}`}
+                                className={`border p-2 mb-2 w-full ${profileErrors.name ? 'border-red-500' : ''}`}
                             />
-                            {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+                            {profileErrors.name && <p className="text-red-500">{profileErrors.name.message}</p>}
                             <input
                                 type="email"
-                                {...register('email', { required: 'Email is required' })}
+                                {...registerProfile('email')}
                                 placeholder="Email"
-                                className={`border p-2 mb-2 w-full ${errors.email ? 'border-red-500' : ''}`}
+                                className="border p-2 mb-2 w-full bg-gray-200 cursor-not-allowed"
+                                readOnly
                             />
-                            {errors.email && <p className="text-red-500">{errors.email.message}</p>}
                             <button
                                 type="submit"
                                 className="bg-blue-500 text-white p-2 rounded"
                             >
                                 Update Profile
                             </button>
-                        </div>
-                        <div>
+                        </form>
+
+                        {/* Change Password Form */}
+                        <form onSubmit={handleSubmitPassword(handleChangePassword)}>
                             <h2 className="text-lg font-semibold mb-2">Change Password</h2>
                             <input
                                 type="password"
-                                {...register('currentPassword', { required: 'Current Password is required' })}
+                                {...registerPassword('currentPassword', { required: 'Current Password is required' })}
                                 placeholder="Current Password"
-                                className={`border p-2 mb-2 w-full ${errors.currentPassword ? 'border-red-500' : ''}`}
+                                className={`border p-2 mb-2 w-full ${passwordErrors.currentPassword ? 'border-red-500' : ''}`}
                             />
-                            {errors.currentPassword && <p className="text-red-500">{errors.currentPassword.message}</p>}
+                            {passwordErrors.currentPassword && <p className="text-red-500">{passwordErrors.currentPassword.message}</p>}
                             <input
                                 type="password"
-                                {...register('newPassword', {
+                                {...registerPassword('newPassword', {
                                     required: 'New Password is required',
                                     pattern: {
                                         value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,10}$/,
@@ -223,38 +219,32 @@ const Profile = () => {
                                     }
                                 })}
                                 placeholder="New Password"
-                                className={`border p-2 mb-2 w-full ${errors.newPassword ? 'border-red-500' : ''}`}
+                                className={`border p-2 mb-2 w-full ${passwordErrors.newPassword ? 'border-red-500' : ''}`}
                             />
-                            {errors.newPassword && <p className="text-red-500">{errors.newPassword.message}</p>}
+                            {passwordErrors.newPassword && <p className="text-red-500">{passwordErrors.newPassword.message}</p>}
                             <input
                                 type="password"
-                                {...register('confirmNewPassword', {
+                                {...registerPassword('confirmNewPassword', {
                                     required: 'Confirm New Password is required',
                                     validate: value => value === newPassword || 'Passwords do not match'
                                 })}
                                 placeholder="Confirm New Password"
-                                className={`border p-2 mb-4 w-full ${errors.confirmNewPassword ? 'border-red-500' : ''}`}
+                                className={`border p-2 mb-4 w-full ${passwordErrors.confirmNewPassword ? 'border-red-500' : ''}`}
                             />
-                            {errors.confirmNewPassword && <p className="text-red-500">{errors.confirmNewPassword.message}</p>}
+                            {passwordErrors.confirmNewPassword && <p className="text-red-500">{passwordErrors.confirmNewPassword.message}</p>}
                             <button
-                                type="button"
-                                onClick={handleSubmit(handleChangePassword)}
+                                type="submit"
                                 className="bg-blue-500 text-white p-2 rounded"
                             >
                                 Change Password
                             </button>
-                        </div>
-                    </form>
-                ) : (
-                    <div className="text-center">
-                        <p className="text-lg">Please log in to view your profile.</p>
+                        </form>
                     </div>
+                ) : (
+                    <p>Loading...</p>
                 )}
-                <div className="text-center mt-4">
-                    <button
-                        onClick={handleLogout}
-                        className="bg-red-500 text-white p-2 rounded"
-                    >
+                <div className="mt-6 text-center">
+                    <button onClick={handleLogout} className="bg-red-500 text-white p-2 rounded">
                         Logout
                     </button>
                 </div>

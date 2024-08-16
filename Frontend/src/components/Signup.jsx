@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { API_ENDPOINTS } from "./storeContext"; // Import the API endpoints
+import { API_ENDPOINTS } from "./storeContext"; // Ensure this is correctly configured
+
+// Optional: Configure Axios with a base URL if necessary
+axios.defaults.baseURL = 'http://localhost:4001'; // Replace with your API base URL if applicable
 
 function Signup() {
   const [isOtpSent, setIsOtpSent] = useState(false);
@@ -10,21 +13,20 @@ function Signup() {
   const { register, handleSubmit, setValue, formState: { errors }, watch, reset } = useForm();
 
   const watchPassword = watch("password");
-  const watchConfirmPassword = watch("confirmPassword");
 
   const handleSendOtp = async (data) => {
     const { email } = data;
 
     try {
-      console.log("Sending OTP to:", email); // Log email for debugging
-      await axios.post(API_ENDPOINTS.SEND_OTP, { email }); // Use the endpoint from storeContext
+      console.log("Sending OTP to:", email);
+      await axios.post(API_ENDPOINTS.SEND_OTP, { email });
       toast.success("OTP sent to your email");
-      console.log("OTP sent successfully"); // Log success message
+      console.log("OTP sent successfully");
       setIsOtpSent(true);
-      setBackendError(null); // Clear any previous error
+      setBackendError(null);
     } catch (err) {
-      console.error("Error sending OTP:", err); // Log error details
-      setBackendError(err.response?.data?.error || "Unknown error");
+      console.error("Error sending OTP:", err);
+      setBackendError(err.response?.data?.error || "Failed to send OTP. Please try again.");
     }
   };
 
@@ -33,31 +35,44 @@ function Signup() {
       toast.error("Passwords do not match");
       return;
     }
-
+  
     const userInfo = {
-      firstName: data.firstName.trim(), // Trim to remove extra spaces
+      firstName: data.firstName.trim(),
       lastName: data.lastName.trim(),
       email: data.email.trim(),
       otp: data.otp.trim(),
       password: data.password,
       confirmPassword: data.confirmPassword
     };
-
+  
     try {
-      await axios.post(API_ENDPOINTS.VERIFY_OTP, userInfo); // Use the endpoint from storeContext
+      await axios.post(API_ENDPOINTS.VERIFY_OTP, userInfo);
       toast.success("Registration Successful");
       document.getElementById("signup_modal").close();
       setTimeout(() => {
         document.getElementById("complete_registration_modal").showModal();
       }, 1000);
-      reset(); // Clear the form fields
-      setBackendError(null); // Clear any previous error
+      reset();
+      setBackendError(null);
+      setIsOtpSent(false);
     } catch (err) {
-      console.error("Error during registration:", err);
-      const errorMsg = err.response?.data?.error || "Unknown error";
-      setBackendError(errorMsg); // Set backend error to display
+      console.error("Detailed Error Information:", {
+        data: err.response?.data,
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        headers: err.response?.headers,
+        config: err.config,
+      });
+  
+      const errorMsg = err.response?.data?.error || "Registration failed. Please try again.";
+      setBackendError(errorMsg);
+      toast.error(errorMsg);
     }
   };
+  
+  
+  
+  
 
   const handleFormSubmit = (data) => {
     if (!isOtpSent) {
@@ -67,26 +82,48 @@ function Signup() {
     }
   };
 
+  const handleCancel = async () => {
+    try {
+      const email = watch('email');
+
+      if (email) {
+        await axios.delete(API_ENDPOINTS.CANCEL_OTP, { data: { email } });
+        console.log('OTP cancelled successfully');
+      }
+
+      document.getElementById("signup_modal").close();
+      reset(); // Reset form fields when OTP is cancelled
+      setIsOtpSent(false);
+    } catch (error) {
+      console.error('Error cancelling OTP:', error.response?.data || error.message);
+      toast.error('Failed to cancel OTP. Please try again.');
+    }
+  };
+
+  const handleNavigateToLogin = () => {
+    document.getElementById("signup_modal").close();
+    document.getElementById("my_modal_3").showModal(); // Open the login modal
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setValue(name, value.trim(), { shouldValidate: true }); // Automatically trim the input value
+    setValue(name, value.trim(), { shouldValidate: true });
   };
 
   return (
     <>
       <dialog id="signup_modal" className="modal">
         <div className="modal-box relative">
-          {/* Close Icon */}
           <button
             type="button"
             className="absolute top-2 right-2 text-gray-500 hover:text-gray-900"
-            onClick={() => document.getElementById("signup_modal").close()}
+            onClick={handleCancel}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          
+
           <form onSubmit={handleSubmit(handleFormSubmit)}>
             <h3 className="font-bold text-lg mb-4">
               {isOtpSent ? "Complete Registration" : "Sign Up"}
@@ -98,9 +135,8 @@ function Signup() {
               </div>
             )}
 
-            {!isOtpSent ? (
+            {!isOtpSent && (
               <>
-                {/* First Name */}
                 <div className="mt-4 space-y-2">
                   <label htmlFor="firstName">First Name</label>
                   <input
@@ -119,7 +155,6 @@ function Signup() {
                   )}
                 </div>
 
-                {/* Last Name */}
                 <div className="mt-4 space-y-2">
                   <label htmlFor="lastName">Last Name</label>
                   <input
@@ -138,7 +173,6 @@ function Signup() {
                   )}
                 </div>
 
-                {/* Email */}
                 <div className="mt-4 space-y-2">
                   <label htmlFor="email">Email</label>
                   <input
@@ -157,7 +191,6 @@ function Signup() {
                   )}
                 </div>
 
-                {/* Send OTP Button */}
                 <div className="flex justify-center mt-6">
                   <button
                     type="submit"
@@ -167,9 +200,10 @@ function Signup() {
                   </button>
                 </div>
               </>
-            ) : (
+            )}
+
+            {isOtpSent && (
               <>
-                {/* OTP */}
                 <div className="mt-4 space-y-2">
                   <label htmlFor="otp">OTP</label>
                   <input
@@ -181,7 +215,7 @@ function Signup() {
                     {...register("otp", {
                       required: "This field is required",
                       pattern: {
-                        value: /^[0-9]{6}$/, // Validate 6-digit OTP
+                        value: /^[0-9]{6}$/,
                         message: "Enter a valid 6-digit OTP"
                       }
                     })}
@@ -192,7 +226,6 @@ function Signup() {
                   )}
                 </div>
 
-                {/* Password */}
                 <div className="mt-4 space-y-2">
                   <label htmlFor="password">Password</label>
                   <input
@@ -204,7 +237,7 @@ function Signup() {
                     {...register("password", {
                       required: "This field is required",
                       pattern: {
-                        value: /^[A-Z][a-z0-9]*$/, // First letter uppercase, rest can be lowercase letters or digits
+                        value: /^[A-Z][a-z0-9]*$/,
                         message: "Password must start with an uppercase letter, followed by lowercase letters or digits"
                       },
                       minLength: {
@@ -223,7 +256,6 @@ function Signup() {
                   )}
                 </div>
 
-                {/* Confirm Password */}
                 <div className="mt-4 space-y-2">
                   <label htmlFor="confirmPassword">Confirm Password</label>
                   <input
@@ -244,27 +276,39 @@ function Signup() {
                   )}
                 </div>
 
-                {/* Sign Up Button */}
                 <div className="flex justify-center mt-6">
                   <button
                     type="submit"
                     className="bg-pink-500 text-white rounded-md px-4 py-2 hover:bg-pink-700 duration-200"
                   >
-                    Sign Up
+                    Register
                   </button>
                 </div>
               </>
             )}
           </form>
+
+          <div className="flex justify-center mt-4">
+          <span className="text-pink-500">Already have an account?</span> 
+             <button
+              type="button"
+              className="text-[#3f00e7] hover:underline"
+              onClick={handleNavigateToLogin}
+            > <u>
+                 Log In
+                </u>
+            </button>
+          </div>
         </div>
       </dialog>
 
-      {/* Complete Registration Modal */}
       <dialog id="complete_registration_modal" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Registration Successful</h3>
-          <p className="py-4">Please check your email to verify your account.</p>
-          <div className="flex justify-end">
+        <div className="modal-box relative">
+          <h3 className="font-bold text-lg">Registration Completed!</h3>
+          <div className="mt-4">
+            <p>Your registration is now complete. Please log in to your account.</p>
+          </div>
+          <div className="mt-6 flex justify-end">
             <button
               type="button"
               className="bg-pink-500 text-white rounded-md px-4 py-2 hover:bg-pink-700 duration-200"
@@ -274,6 +318,10 @@ function Signup() {
             </button>
           </div>
         </div>
+      </dialog>
+
+      <dialog id="my_modal_3" className="modal">
+        {/* Add your login modal content here */}
       </dialog>
     </>
   );

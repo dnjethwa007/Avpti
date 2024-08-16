@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './Home/Home';
 import AboutUs from './components/AboutUs';
 import Course from './Course/Courses';
+import ContactUs from './components/ContactUs';
 import TermsAndConditions from './components/TermsAndConditions';
 import Sem from './Sem/Sem';
 import SemDetails from './Sem/SemDetails';
@@ -22,6 +23,7 @@ export default function App() {
                 <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route element={<PrivateRoute />}>
+                    <Route path="/contact" element={<ContactUs />} /> {/* Protected route */}
                     <Route path="/course/:courseTitle" element={<Sem />} />
                     <Route path="/course/:courseTitle/:semId" element={<SemDetails />} />
                     <Route path="/course/:courseTitle/:semId/:subjectCode" element={<SubjectDetails />} />

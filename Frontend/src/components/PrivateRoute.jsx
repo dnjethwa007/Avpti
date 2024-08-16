@@ -38,6 +38,11 @@ const PrivateRoute = () => {
         navigate(location.state?.from || '/');
     };
 
+    // Redirect to login page if not authenticated
+    if (!isAuthenticated && location.pathname !== '/contact') {
+        return <Login onLoginSuccess={handleLoginSuccess} />;
+    }
+
     return (
         <>
             {showLoginModal && <Login onLoginSuccess={handleLoginSuccess} />}

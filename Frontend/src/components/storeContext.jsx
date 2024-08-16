@@ -1,11 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Define your API base URL and endpoints
-const API_BASE_URL = "https://avpti-backed.onrender.com";
-<<<<<<< HEAD
-// const API_BASE_URL = "http://localhost:4001";
-=======
->>>>>>> ab9745cd071cb570618eb30c90f255870a3e636e
+// const API_BASE_URL = "https://avpti-backed.onrender.com";
+const API_BASE_URL = "http://localhost:4001";
 
 export const API_ENDPOINTS = {
     PROFILE: `${API_BASE_URL}/user/profile`,
@@ -15,7 +12,8 @@ export const API_ENDPOINTS = {
     SEND_RESET_LINK: `${API_BASE_URL}/user/send-reset-link`,
     RESET_PASSWORD: `${API_BASE_URL}/user/reset-password`,
     SEND_OTP: `${API_BASE_URL}/user/send-otp`, 
-    VERIFY_OTP: `${API_BASE_URL}/user/verify-otp` 
+    VERIFY_OTP: `${API_BASE_URL}/user/verify-otp`,
+    CANCEL_OTP: `${API_BASE_URL}/user/cancel-otp`
 };
 
 const StoreContext = createContext();
